@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library</title>
+</head>
+<body>
+    <h1>Add Your Fav Book</h1>
+
+    <a href="{% url 'post_create' %}">Upload A Book</a>
+<br>
+
+</br>
+    <form method="get" action=".">
+        <label for="q">Search by Title:</label>
+        <input type="text" name="q" id="q" value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <form method="get" action=".">
+        <label for="author">Filter by Author:</label>
+        <select name="author" id="author">
+            <option value="">All Authors</option>
+            {% for author in authors %}
+                <option value="{{ author.name }}" {% if request.GET.author == author.name %}selected{% endif %}>{{ author.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="category">Filter by Category:</label>
+        <select name="category" id="category">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+                <option value="{{ category.name }}" {% if request.GET.category == category.name %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <ul>
+        {% for post in posts %}
+            <li>
+                <strong>Title:</strong> <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a><br>
+                <strong>Author:</strong> {{ post.author.name }}<br>
+                <strong>Category:</strong> {{ post.category.name }}<br>
+                <strong>Content:</strong> {{ post.content }}<br>
+                <a href="{% url 'post_update' post.pk %}">Edit</a>
+                <a href="{% url 'post_delete' post.pk %}">Delete</a>
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+</body>
+</html>
